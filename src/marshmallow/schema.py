@@ -56,7 +56,7 @@ def _get_fields(attrs):
 
 # This function allows Schemas to inherit from non-Schema classes and ensures
 #   inheritance according to the MRO
-def _get_fields_by_mro(klass):
+def _get_fields_by_mro(klass: SchemaMeta):
     """Collect fields from a class, following its method resolution order. The
     class itself is excluded from the search; only its parents are checked. Get
     fields from ``_declared_fields`` if available, else use ``__dict__``.
@@ -124,7 +124,7 @@ class SchemaMeta(ABCMeta):
     @classmethod
     def get_declared_fields(
         mcs,
-        klass: type,
+        klass: SchemaMeta,
         cls_fields: list,
         inherited_fields: list,
         dict_cls: type = dict,
@@ -417,7 +417,7 @@ class Schema(base.SchemaABC, metaclass=SchemaMeta):
     @classmethod
     def from_dict(
         cls,
-        fields: dict[str, ma_fields.Field | type],
+        fields: dict[str, ma_fields.Field | type[ma_fields.Field]],
         *,
         name: str = "GeneratedSchema",
     ) -> type:
